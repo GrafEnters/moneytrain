@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour {
     public void Init(float speed, Vector3 dir) {
         _speed = speed;
         _direction = dir.normalized;
+        Destroy(gameObject, 5);
     }
 
     private void FixedUpdate() {

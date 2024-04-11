@@ -31,7 +31,7 @@ public class LevelsManager : MonoBehaviour {
 
     private void SpawnEnemies(LevelConfig config) {
         for (int i = 0; i < config.EnemyAmount; i++) {
-            if (Random.Range(0, 4) == 0) {
+            if (Random.Range(0, 4) < 3) {
                 _enemiesManager.SpawnEnemy(EnemyType.First);
             } else {
                 _enemiesManager.SpawnEnemy(EnemyType.Second);

@@ -15,6 +15,7 @@ public class PlayerManager : MonoBehaviour {
     public void ResetPlayer() {
         _isPlayerAlive = true;
         _player.Spawn();
+        _player.transform.position = Vector3.zero;
     }
 
     public void SetControlsEnabled(bool isEnabled) {

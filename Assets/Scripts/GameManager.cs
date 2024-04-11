@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour {
         }
 
         StopCoroutine(_gameLoopCoroutine);
+        _gameLoopCoroutine = null;
+        _enemiesManager.ResetEnemies();
         _uiManager.ShowDiedDialog();
     }
 

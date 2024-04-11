@@ -8,7 +8,7 @@ public class WagonsManager : MonoBehaviour {
     private UIManager _uiManager;
 
     [SerializeField]
-    private Wagon _wagonPrefab;
+    private List<Wagon> _wagonPrefab;
 
     [SerializeField]
     private Transform _wagonsHolder;
@@ -22,12 +22,12 @@ public class WagonsManager : MonoBehaviour {
     public IEnumerator AddWagonCoroutine() {
         _isWagonSelected = false;
         _uiManager.ShowWagonSelectDialog();
-        yield return new WaitWhile(() => _isWagonSelected);
+        yield return new WaitWhile(() => !_isWagonSelected);
     }
 
-    public void SelectWagon() {
+    public void SelectWagon(bool isLeft) {
         _isWagonSelected = true;
-        AddWagon();
+        AddWagon(isLeft);
     }
 
     public void ResetTrain() {
@@ -36,21 +36,22 @@ public class WagonsManager : MonoBehaviour {
         }
 
         _wagons = new List<Wagon>();
-        AddWagon();
+        AddWagon(true);
     }
 
-    private void AddWagon() {
-        Wagon wagon = Instantiate(_wagonPrefab, _wagonsHolder);
+    private void AddWagon(bool isLeft) {
+        Wagon wagon = Instantiate(_wagonPrefab[Random.Range(0,_wagonPrefab.Count)], _wagonsHolder);
         if (_wagons.Count == 0) {
             _wagons.Add(wagon);
+            return;
+        }
+
+        if (isLeft) {
+            wagon.Attach(_wagons.First().LeftHook, true);
+            _wagons = _wagons.Prepend(wagon).ToList();
         } else {
-            if (Random.Range(0, 2) == 0) {
-                wagon.Attach(_wagons.First().LeftHook, true);
-                _wagons = _wagons.Prepend(wagon).ToList();
-            } else {
-                wagon.Attach(_wagons.Last().RightHook, false);
-                _wagons.Add(wagon);
-            }
+            wagon.Attach(_wagons.Last().RightHook, false);
+            _wagons.Add(wagon);
         }
     }
 }

@@ -31,7 +31,7 @@ public class Player : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D col) {
-        if (col.CompareTag("EnemyBullet") || col.CompareTag("EnemyTouch")) {
+        if (col.attachedRigidbody.CompareTag("EnemyBullet") || col.attachedRigidbody.CompareTag("EnemyTouch")) {
             TakeDamage();
         }
     }
@@ -60,7 +60,9 @@ public class Player : MonoBehaviour {
         if (horizontal != 0 || vertical != 0) {
             Vector3 movement = new Vector3(horizontal, vertical, 0);
             Vector2 shift = _speed * Time.fixedDeltaTime * movement;
-            _rb.MovePosition(_rb.position + shift);
+            _rb.MovePosition (_rb.position + shift);
+        } else {
+            _rb.velocity = Vector2.zero;
         }
     }
 

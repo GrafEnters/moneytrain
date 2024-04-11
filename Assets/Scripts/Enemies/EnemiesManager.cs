@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemiesManager : MonoBehaviour {
@@ -28,6 +29,14 @@ public class EnemiesManager : MonoBehaviour {
         while (_aliveEnemies.Count > 0) {
             yield return new WaitForSeconds(1);
         }
+    }
+
+    public void ResetEnemies() {
+        foreach (var VARIABLE in _aliveEnemies) {
+            Destroy(VARIABLE.GameObject());
+        }
+
+        _aliveEnemies = new List<Enemy>();
     }
 
     private void OnEnemyDie(Enemy died) {
