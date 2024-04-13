@@ -14,15 +14,28 @@ public class EnemiesManager : MonoBehaviour {
     private PlayerManager _playerManager;
 
     [SerializeField]
-    private List<Transform> _spawnPoints;
+    private WagonsManager _wagonsManager;
+
+    [SerializeField]
+    private Transform _indicationHolder;
+
+    private List<Transform> _spawnPoints => _wagonsManager.SpawnPoints;
 
     public void SpawnEnemy(EnemyType type) {
         Enemy prefab = _enemies.First(e => e.Type == type).Prefab;
         var point = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
-        Enemy obj = Instantiate(prefab,point );
+        Enemy obj = Instantiate(prefab, point);
         obj.transform.position = point.position;
         obj.Init(_playerManager.Player, OnEnemyDie);
+        SpawnIndication(obj);
         _aliveEnemies.Add(obj);
+    }
+
+    private void SpawnIndication(Enemy enemy) {
+        TriangleIndication obj = Instantiate(enemy.IndicationPrefab, _indicationHolder);
+        obj.Init(Camera.main.transform, enemy.transform);
+        enemy.OnUpdate += delegate(Enemy enemy1) { obj.UpdatePos();};
+        enemy.OnDie += delegate(Enemy enemy1) { Destroy(obj.gameObject); };
     }
 
     public IEnumerator WaitForEnemiesToDie() {

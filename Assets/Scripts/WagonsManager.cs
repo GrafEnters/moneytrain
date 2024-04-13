@@ -19,6 +19,8 @@ public class WagonsManager : MonoBehaviour {
 
     private bool _isWagonSelected = false;
 
+    public List<Transform> SpawnPoints => CollectSpawnPoints();
+    
     public IEnumerator AddWagonCoroutine() {
         _isWagonSelected = false;
         _uiManager.ShowWagonSelectDialog();
@@ -53,5 +55,14 @@ public class WagonsManager : MonoBehaviour {
             wagon.Attach(_wagons.Last().RightHook, false);
             _wagons.Add(wagon);
         }
+    }
+
+    private List<Transform>  CollectSpawnPoints() {
+        List<Transform> points = new List<Transform>();
+        foreach (Wagon wagon in _wagons) {
+            points.AddRange(wagon.SpawnPoints);
+        }
+
+        return points;
     }
 }

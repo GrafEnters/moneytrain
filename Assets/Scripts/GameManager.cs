@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
+        _levelsManager.ResetLevels();
         _wagonsManager.ResetTrain();
         _playerManager.ResetPlayer();
         _gameLoopCoroutine = StartCoroutine(GameLoop());

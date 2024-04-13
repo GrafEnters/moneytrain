@@ -24,18 +24,16 @@ public class LevelsManager : MonoBehaviour {
     }
 
     private void StartLevel(int levelIndex) {
-        LevelConfig config = _levels.Last();//_levels.Count >= levelIndex ? _levels.Last() : _levels[levelIndex];
+        levelIndex--;
+        LevelConfig config = levelIndex < _levels.Count ? _levels[levelIndex] : _levels.Last();
         ChangeBackground(levelIndex);
         SpawnEnemies(config);
     }
 
     private void SpawnEnemies(LevelConfig config) {
         for (int i = 0; i < config.EnemyAmount; i++) {
-            if (Random.Range(0, 4) < 3) {
-                _enemiesManager.SpawnEnemy(EnemyType.First);
-            } else {
-                _enemiesManager.SpawnEnemy(EnemyType.Second);
-            }
+            EnemyType type = config.PossibleEnemies[Random.Range(0, config.PossibleEnemies.Count)]; 
+            _enemiesManager.SpawnEnemy(type);
         }
     }
 

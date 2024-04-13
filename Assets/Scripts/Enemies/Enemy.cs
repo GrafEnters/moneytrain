@@ -14,15 +14,21 @@ public class Enemy : MonoBehaviour {
     private float _followStopDist = 0.5f;
 
     [SerializeField]
+    private TriangleIndication _indicationPrefab;
+
+    public TriangleIndication IndicationPrefab => _indicationPrefab;
+
+    [SerializeField]
     private Rigidbody2D _rb;
 
     private Player _player;
 
-    private Action<Enemy> _onDie;
+    public Action<Enemy> OnDie;
+    public Action<Enemy> OnUpdate;
 
-    public void Init(Player player, Action<Enemy> OnDie) {
+    public void Init(Player player, Action<Enemy> onDie) {
         _player = player;
-        _onDie = OnDie;
+        OnDie += onDie;
         DoEnemyStuff();
     }
 
@@ -38,6 +44,7 @@ public class Enemy : MonoBehaviour {
                 _rb.MovePosition(_rb.position + shift);
             }
 
+            OnUpdate?.Invoke(this);
             yield return new WaitForFixedUpdate();
         }
 
@@ -55,6 +62,8 @@ public class Enemy : MonoBehaviour {
     }
 
     public void Die() {
-        _onDie?.Invoke(this);
+        OnUpdate = null;
+        OnDie?.Invoke(this);
+        OnDie = null;
     }
 }

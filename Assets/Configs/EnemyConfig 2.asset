@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa389029769e4b2c9e32a843cf39dc85, type: 3}
-  m_Name: LevelConfig
+  m_Script: {fileID: 11500000, guid: dc6a012235ee4575abfad2e1b37494c8, type: 3}
+  m_Name: EnemyConfig 2
   m_EditorClassIdentifier: 
-  EnemyAmount: 1
-  PossibleEnemies: ffffffff
+  Type: -1
+  Prefab: {fileID: 4974874065840508486, guid: 2821e7789a275ea45aa970094b1f54ad, type: 3}

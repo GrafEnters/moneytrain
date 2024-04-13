@@ -20,6 +20,9 @@ public class Player : MonoBehaviour {
     private int _maxHp = 3;
 
     [SerializeField]
+    private PlayerHand _hand;
+
+    [SerializeField]
     private Bullet _bulletPrefab;
 
     public int Hp = 3;
@@ -52,15 +55,17 @@ public class Player : MonoBehaviour {
 
     private void FixedUpdate() {
         if (!_isControlsEnabled) {
+            _rb.velocity = Vector2.zero;
+            _rb.angularVelocity = 0;
             return;
         }
-
+        
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         if (horizontal != 0 || vertical != 0) {
             Vector3 movement = new Vector3(horizontal, vertical, 0);
             Vector2 shift = _speed * Time.fixedDeltaTime * movement;
-            _rb.MovePosition (_rb.position + shift);
+            _rb.MovePosition(_rb.position + shift);
         } else {
             _rb.velocity = Vector2.zero;
         }
@@ -71,24 +76,28 @@ public class Player : MonoBehaviour {
             return;
         }
 
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        Vector3 direction = mousePos - transform.position;
+        _hand.UpdatePos(direction);
+
         if (Input.GetMouseButtonDown(0) && !_isRecoil) {
-            StartCoroutine(ShootCoroutine());
+            StartCoroutine(ShootCoroutine(direction));
         }
     }
 
     private bool _isRecoil = false;
 
-    private IEnumerator ShootCoroutine() {
+    private IEnumerator ShootCoroutine(Vector3 direction) {
         _isRecoil = true;
-        SpawnBullet();
+        SpawnBullet(direction);
         yield return new WaitForSeconds(_recoilTime);
         _isRecoil = false;
     }
 
-    private void SpawnBullet() {
-        Bullet bullet = Instantiate(_bulletPrefab, transform.position, quaternion.identity);
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        bullet.Init(_bulletSpeed, mousePos - transform.position);
+    private void SpawnBullet(Vector3 direction) {
+        Vector3 point = _hand.WeaponShootPoint.position;
+        Bullet bullet = Instantiate(_bulletPrefab, point, quaternion.identity);
+        bullet.Init(_bulletSpeed, direction);
     }
 }
