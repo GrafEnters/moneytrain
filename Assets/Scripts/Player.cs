@@ -79,7 +79,7 @@ public class Player : MonoBehaviour {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         Vector3 direction = mousePos - transform.position;
-        _hand.UpdatePos(direction);
+       _hand.UpdatePos(mousePos);
 
         if (Input.GetMouseButtonDown(0) && !_isRecoil) {
             StartCoroutine(ShootCoroutine(direction));
@@ -96,8 +96,8 @@ public class Player : MonoBehaviour {
     }
 
     private void SpawnBullet(Vector3 direction) {
-        Vector3 point = _hand.WeaponShootPoint.position;
-        Bullet bullet = Instantiate(_bulletPrefab, point, quaternion.identity);
-        bullet.Init(_bulletSpeed, direction);
+        var point = _hand.WeaponShootPoint;
+        Bullet bullet = Instantiate(_bulletPrefab, point.position, quaternion.identity);
+        bullet.Init(_bulletSpeed, _hand.ShootDir);
     }
 }

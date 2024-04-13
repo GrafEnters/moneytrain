@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9107535578428245706}
   - component: {fileID: 341568042646863213}
+  - component: {fileID: 5870705056819594773}
   m_Layer: 6
   m_Name: Icon (1)
   m_TagString: Untagged
@@ -119,6 +120,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5870705056819594773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3966565769742902572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b8a043460aea34db7e8b7a5f162bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Shift: 0
 --- !u!1 &5081426422333775013
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +218,7 @@ GameObject:
   - component: {fileID: 8129754126026909025}
   - component: {fileID: 9149925617107764854}
   - component: {fileID: 3873400233821445513}
+  - component: {fileID: 471061212965691312}
   m_Layer: 6
   m_Name: Icon
   m_TagString: Untagged
@@ -316,3 +331,16 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &471061212965691312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629050771969097807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b8a043460aea34db7e8b7a5f162bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Shift: 0
