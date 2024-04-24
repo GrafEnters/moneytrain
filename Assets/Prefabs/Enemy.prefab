@@ -48,10 +48,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 3
-  _speed: 2
+  _bulletPrefab: {fileID: 7161131270977016334, guid: bb0b2faf284753a459c34227b7529f19, type: 3}
+  _speed: 3
   _followStopDist: 0.5
   _indicationPrefab: {fileID: 289085771566748565, guid: b524368c724f47d47a863c9770765b07, type: 3}
+  _miny: 5
+  _maxy: 10
+  _maxx: 20
+  _minx: -20
   _rb: {fileID: 6193120893780370838}
+  _enemyBulletSpeed: 15
+  _maxRecoil: 1.5
 --- !u!50 &6193120893780370838
 Rigidbody2D:
   serializedVersion: 4

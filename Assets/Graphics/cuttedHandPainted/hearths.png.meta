@@ -191,7 +191,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hearths_0: 3964667435554444819
+      hearths_1: 4922453033097607069
+      hearths_2: -7765188001786717524
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
