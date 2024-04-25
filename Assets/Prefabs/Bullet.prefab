@@ -4862,39 +4862,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8129754126026909025}
-  - {fileID: 9107535578428245706}
   m_Father: {fileID: 5476253116872965995}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3966565769742902572
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9107535578428245706}
-  m_Layer: 6
-  m_Name: Icon (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9107535578428245706
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3966565769742902572}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1956233, y: 1.1956233, z: 1.1956233}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4318946845551075823}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5081426422333775013
 GameObject:
@@ -4981,7 +4949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8129754126026909025}
   - component: {fileID: 9149925617107764854}
-  - component: {fileID: 2714682791239205713}
+  - component: {fileID: 8508682641211784246}
   m_Layer: 6
   m_Name: Icon
   m_TagString: Untagged
@@ -5048,7 +5016,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 47735f70c1ab72541b8be8f0be7d774f, type: 3}
-  m_Color: {r: 0.93962264, g: 0.80301243, b: 0.07623346, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5058,8 +5026,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &2714682791239205713
-CapsuleCollider2D:
+--- !u!58 &8508682641211784246
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5092,6 +5060,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.25, y: 0.4375}
-  m_Direction: 0
+  m_Offset: {x: 0, y: 0.0008265823}
+  m_Radius: 0.2390929

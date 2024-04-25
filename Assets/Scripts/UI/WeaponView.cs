@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -13,27 +14,35 @@ public class WeaponView : MonoBehaviour {
     [SerializeField]
     private TextMeshProUGUI _amountText;
 
+    [SerializeField]
+    private Animation _animation;
+
     private List<GameObject> _bullets = new List<GameObject>();
 
     private int _currentAmount;
     private int _totalAmount;
 
-    private void Reload(int amount) {
+    public IEnumerator Reload(int amount) {
         _currentAmount = amount;
         _totalAmount = amount;
-        foreach (var VARIABLE in _bullets) {
-            Destroy(VARIABLE.gameObject);
+        _animation.Play("Reload");
+        yield return new WaitWhile(() => _animation.isPlaying);
+        UpdateText();
+    }
+
+    //triggered by animation
+    public void RespawnBullets() {
+        foreach (var bullet in _bullets) {
+            Destroy(bullet.gameObject);
         }
 
         _bullets = new List<GameObject>();
 
-        for (int index = 0; index < amount; index++) {
+        for (int index = 0; index < _totalAmount; index++) {
             GameObject b = Instantiate(_bulletPrefab, _bulletsHolder);
             b.SetActive(true);
             _bullets.Add(b);
         }
-
-        UpdateText();
     }
 
     public void Shoot() {
@@ -42,6 +51,7 @@ public class WeaponView : MonoBehaviour {
         _bullets.Remove(b);
         Destroy(b.gameObject);
         UpdateText();
+        _animation.Play("Shoot");
     }
 
     private void UpdateText() {

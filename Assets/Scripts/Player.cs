@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour {
     [SerializeField]
@@ -26,21 +24,41 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private Bullet _bulletPrefab;
 
-    [SerializeField] private float _dashDuration = 1;
+    [SerializeField]
+    private float _dashDuration = 1;
 
-    [SerializeField] private float dashSpeed = 1;
+    [SerializeField]
+    private float dashSpeed = 1;
 
-    [SerializeField] private float _dashCooldawntime = 3;
+    [SerializeField]
+    private float _dashCooldawntime = 3;
+
+    [SerializeField]
+    private WeaponView _weaponView;
+    [SerializeField]
+    private CameraFollow _cameraFollow;
+
+    [SerializeField]
+    private Animator _animator;
+
+    [SerializeField]
+    private float _recoilForce = 2;
     
     private bool _isDashCooldown = false;
 
     private bool _isRecoil = false;
+    
+    private bool _isReload = false;
+
+    private int _maxBulletsAmount = 6;
+    private int _currentBulletsAmount = 0;
 
     private bool _isDashing;
 
     public int Hp = 3;
 
     private bool _isControlsEnabled = false;
+    private static readonly int Dash = Animator.StringToHash("Dash");
 
     public void SetControlsEnabled(bool isEnabled) {
         _isControlsEnabled = isEnabled;
@@ -73,11 +91,10 @@ public class Player : MonoBehaviour {
             return;
         }
 
-        if (_isDashing)
-        {
-           return; 
+        if (_isDashing) {
+            return;
         }
-        
+
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         if (horizontal != 0 || vertical != 0) {
@@ -94,57 +111,79 @@ public class Player : MonoBehaviour {
             return;
         }
 
+        if (!_isDashing) {
+            Vector3 dir = UpdateRotation();
+
+            if (Input.GetKeyDown(KeyCode.Space) && !_isDashCooldown) {
+                StartCoroutine(DashCoroutine());
+            }
+
+            if (Input.GetMouseButtonDown(0) && !_isRecoil && !_isReload) {
+                StartCoroutine(ShootCoroutine(dir));
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && !_isReload) {
+            StartCoroutine(ReloadCoroutine());
+        }
+    }
+
+    private Vector3 UpdateRotation() {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         Vector3 direction = mousePos - transform.position;
         transform.up = direction;
-       _hand.UpdatePos(mousePos);
-
-       if (Input.GetKeyDown(KeyCode.Space) && !_isDashing && !_isDashCooldown)
-       {
-           StartCoroutine(DashCoroutine());
-       }
-
-       if (Input.GetMouseButtonDown(0) && !_isRecoil && !_isDashing) {
-            StartCoroutine(ShootCoroutine(direction));
-       }
+        _hand.UpdatePos(mousePos);
+        return direction;
     }
 
     private IEnumerator ShootCoroutine(Vector3 direction) {
         _isRecoil = true;
-        SpawnBullet(direction);
+        if (_currentBulletsAmount == 0) {
+            yield return StartCoroutine(ReloadCoroutine());
+        } else {
+            _currentBulletsAmount--;
+            _weaponView.Shoot();
+            SpawnBullet(direction);
+            _cameraFollow.RecoilShake(direction, _recoilForce);
+        }
+      
         yield return new WaitForSeconds(_recoilTime);
         _isRecoil = false;
     }
-    
+
+    private IEnumerator ReloadCoroutine() {
+        _isReload = true;
+        yield return StartCoroutine(_weaponView.Reload(_maxBulletsAmount));
+        _currentBulletsAmount = _maxBulletsAmount;
+        _isReload = false;
+    }
+
     private IEnumerator DashCoroutine() {
         _isDashing = true;
         Vector3 direction = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.A))
-        {
+        if (Input.GetKey(KeyCode.A)) {
             direction += Vector3.left;
         }
-        if (Input.GetKey(KeyCode.W))
-        {
+
+        if (Input.GetKey(KeyCode.W)) {
             direction += Vector3.up;
         }
-        if (Input.GetKey(KeyCode.D))
-        {
+
+        if (Input.GetKey(KeyCode.D)) {
             direction += Vector3.right;
         }
-        if (Input.GetKey(KeyCode.S))
-        {
+
+        if (Input.GetKey(KeyCode.S)) {
             direction += Vector3.up * -1;
         }
-        
-        
 
         float curTime = 0;
-
-        while (curTime < _dashDuration)
-        {
-            Vector2 shift = direction * (Time.fixedDeltaTime * dashSpeed);
+        _animator.SetTrigger(Dash);
+        transform.up = direction;
+        while (curTime < _dashDuration) {
+            Vector2 shift = direction.normalized * (Time.fixedDeltaTime * dashSpeed);
             _rb.MovePosition(shift + _rb.position);
 
             curTime += Time.fixedDeltaTime;
@@ -155,7 +194,6 @@ public class Player : MonoBehaviour {
         _isDashCooldown = true;
         yield return new WaitForSeconds(_dashCooldawntime);
         _isDashCooldown = false;
-
     }
 
     private void SpawnBullet(Vector3 direction) {

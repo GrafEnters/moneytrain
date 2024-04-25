@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 47735f70c1ab72541b8be8f0be7d774f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e502ee85466d1d840b7e7a1f9172905b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 8841378551838149202}
   - component: {fileID: 1029574709408969357}
   - component: {fileID: 2721550788019567221}
+  - component: {fileID: 3445491851856628254}
   m_Layer: 5
   m_Name: WeaponView
   m_TagString: Untagged
@@ -137,6 +138,25 @@ MonoBehaviour:
   _bulletPrefab: {fileID: 3035550822444936179}
   _bulletsHolder: {fileID: 3464162458504500220}
   _amountText: {fileID: 8853279071082834855}
+  _animation: {fileID: 3445491851856628254}
+--- !u!111 &3445491851856628254
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4572917351598778370}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 73fcaf0dfa79f9b418603cce3523ac8d, type: 2}
+  - {fileID: 7400000, guid: 1f32a2f1d90968d4b9e3a7d11203da18, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &4720513444801779700
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +340,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8841378551838149202}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 28.906036}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 10.35}

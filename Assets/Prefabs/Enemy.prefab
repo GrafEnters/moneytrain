@@ -57,7 +57,7 @@ MonoBehaviour:
   _maxx: 20
   _minx: -20
   _rb: {fileID: 6193120893780370838}
-  _enemyBulletSpeed: 15
+  _enemyBulletSpeed: 10
   _maxRecoil: 1.5
 --- !u!50 &6193120893780370838
 Rigidbody2D:
