@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour {
     [SerializeField]
@@ -24,6 +25,18 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private Bullet _bulletPrefab;
+
+    [SerializeField] private float _dashDuration = 1;
+
+    [SerializeField] private float dashSpeed = 1;
+
+    [SerializeField] private float _dashCooldawntime = 3;
+    
+    private bool _isDashCooldown = false;
+
+    private bool _isRecoil = false;
+
+    private bool _isDashing;
 
     public int Hp = 3;
 
@@ -59,6 +72,11 @@ public class Player : MonoBehaviour {
             _rb.angularVelocity = 0;
             return;
         }
+
+        if (_isDashing)
+        {
+           return; 
+        }
         
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -82,18 +100,62 @@ public class Player : MonoBehaviour {
         transform.up = direction;
        _hand.UpdatePos(mousePos);
 
-        if (Input.GetMouseButtonDown(0) && !_isRecoil) {
-            StartCoroutine(ShootCoroutine(direction));
-        }
-    }
+       if (Input.GetKeyDown(KeyCode.Space) && !_isDashing && !_isDashCooldown)
+       {
+           StartCoroutine(DashCoroutine());
+       }
 
-    private bool _isRecoil = false;
+       if (Input.GetMouseButtonDown(0) && !_isRecoil && !_isDashing) {
+            StartCoroutine(ShootCoroutine(direction));
+       }
+    }
 
     private IEnumerator ShootCoroutine(Vector3 direction) {
         _isRecoil = true;
         SpawnBullet(direction);
         yield return new WaitForSeconds(_recoilTime);
         _isRecoil = false;
+    }
+    
+    private IEnumerator DashCoroutine() {
+        _isDashing = true;
+        Vector3 direction = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            direction += Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            direction += Vector3.up;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            direction += Vector3.right;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            direction += Vector3.up * -1;
+        }
+        
+        
+
+        float curTime = 0;
+
+        while (curTime < _dashDuration)
+        {
+            Vector2 shift = direction * (Time.fixedDeltaTime * dashSpeed);
+            _rb.MovePosition(shift + _rb.position);
+
+            curTime += Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
+        _isDashing = false;
+        _isDashCooldown = true;
+        yield return new WaitForSeconds(_dashCooldawntime);
+        _isDashCooldown = false;
+
     }
 
     private void SpawnBullet(Vector3 direction) {
