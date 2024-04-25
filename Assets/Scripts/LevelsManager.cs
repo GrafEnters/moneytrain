@@ -10,7 +10,7 @@ public class LevelsManager : MonoBehaviour {
     private EnemiesManager _enemiesManager;
 
     [SerializeField]
-    private List<GameObject> _backgrounds;
+    private BackgroundManager _backgroundManager;
 
     private int curLevel = 0;
 
@@ -26,21 +26,14 @@ public class LevelsManager : MonoBehaviour {
     private void StartLevel(int levelIndex) {
         levelIndex--;
         LevelConfig config = levelIndex < _levels.Count ? _levels[levelIndex] : _levels.Last();
-        ChangeBackground(levelIndex);
+        _backgroundManager.ChangeBackground(levelIndex);
         SpawnEnemies(config);
     }
 
     private void SpawnEnemies(LevelConfig config) {
         for (int i = 0; i < config.EnemyAmount; i++) {
-            EnemyType type = config.PossibleEnemies[Random.Range(0, config.PossibleEnemies.Count)]; 
+            EnemyType type = config.PossibleEnemies[Random.Range(0, config.PossibleEnemies.Count)];
             _enemiesManager.SpawnEnemy(type);
-        }
-    }
-
-    private void ChangeBackground(int levelIndex) {
-        int backIndex = levelIndex % _backgrounds.Count;
-        for (int i = 0; i < _backgrounds.Count; i++) {
-            _backgrounds[i].SetActive(i == backIndex);
         }
     }
 }
