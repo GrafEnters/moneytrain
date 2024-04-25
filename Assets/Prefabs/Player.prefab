@@ -194,6 +194,7 @@ GameObject:
   - component: {fileID: 6464888685649002383}
   - component: {fileID: 8516377597951347278}
   - component: {fileID: 6639150482099425445}
+  - component: {fileID: 3587065377476600924}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -243,6 +244,7 @@ MonoBehaviour:
   _cameraFollow: {fileID: 0}
   _animator: {fileID: 6639150482099425445}
   _recoilForce: 0.05
+  _cursorController: {fileID: 3587065377476600924}
   Hp: 3
 --- !u!50 &8516377597951347278
 Rigidbody2D:
@@ -293,6 +295,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3587065377476600924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564430968526099596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584945bc9be451a4c9614ac7c420f2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _normal: {fileID: 2800000, guid: eac63c09d6ebba147bc30b5d92ebc80a, type: 3}
+  _red: {fileID: 2800000, guid: d78049b787eae084bbc7296bc04228c7, type: 3}
+  _reload: {fileID: 2800000, guid: fc3317949eae8fd44bd6fb6cdcbe403c, type: 3}
 --- !u!1 &6637590061961353333
 GameObject:
   m_ObjectHideFlags: 0

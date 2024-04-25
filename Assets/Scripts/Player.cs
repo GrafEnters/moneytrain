@@ -43,6 +43,9 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private float _recoilForce = 2;
+
+    [SerializeField]
+    private CursorController _cursorController;
     
     private bool _isDashCooldown = false;
 
@@ -146,16 +149,26 @@ public class Player : MonoBehaviour {
             _weaponView.Shoot();
             SpawnBullet(direction);
             _cameraFollow.RecoilShake(direction, _recoilForce);
+            if (_currentBulletsAmount > 0) {
+                _cursorController.ChangeCursor(CursorState.Red);
+            }
         }
       
         yield return new WaitForSeconds(_recoilTime);
+        if (_currentBulletsAmount > 0) {
+            _cursorController.ChangeCursor(CursorState.Normal);
+        } else {
+            _cursorController.ChangeCursor(CursorState.Reload);
+        }
         _isRecoil = false;
     }
 
     private IEnumerator ReloadCoroutine() {
         _isReload = true;
+        _cursorController.ChangeCursor(CursorState.Reload);
         yield return StartCoroutine(_weaponView.Reload(_maxBulletsAmount));
         _currentBulletsAmount = _maxBulletsAmount;
+        _cursorController.ChangeCursor(CursorState.Normal);
         _isReload = false;
     }
 
