@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa389029769e4b2c9e32a843cf39dc85, type: 3}
   m_Name: LevelConfig 2
   m_EditorClassIdentifier: 
-  EnemyAmount: 5
+  EnemyAmount: 15
   PossibleEnemies: 0100000002000000
