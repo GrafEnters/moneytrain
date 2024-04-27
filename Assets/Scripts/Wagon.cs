@@ -1,9 +1,15 @@
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 public class Wagon : MonoBehaviour {
     [SerializeField]
     private Transform _leftHook, _rightHook;
+
+    [SerializeField]
+    private List<BoxOfSpice> _countOfSpice = new List<BoxOfSpice>();
+
+    public List<BoxOfSpice> CountOfSpice => _countOfSpice;
 
     public Transform LeftHook => _leftHook;
     public Transform RightHook => _rightHook;
