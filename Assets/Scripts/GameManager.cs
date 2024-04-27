@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour {
         while (true) {
             _playerManager.SetControlsEnabled(true);
             _levelsManager.StartNextLevel();
-            yield return StartCoroutine(_enemiesManager.WaitForEnemiesToDie());
+
+            yield return StartCoroutine(_levelsManager.ProgressCoroutine());
             _playerManager.SetControlsEnabled(false);
             yield return StartCoroutine(_wagonsManager.AddWagonCoroutine());
         }

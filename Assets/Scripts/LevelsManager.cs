@@ -42,7 +42,6 @@ public class LevelsManager : MonoBehaviour {
         LevelConfig config = levelIndex < _levels.Count ? _levels[levelIndex] : _levels.Last();
         _backgroundManager.ChangeBackground(levelIndex);
         SpawnEnemies(config);
-        _progressCoroutine = StartCoroutine(ProgressCoroutine());
     }
 
     private LevelConfig GetLevel(int levelIndex) {
@@ -50,19 +49,27 @@ public class LevelsManager : MonoBehaviour {
     }
 
     private void SpawnEnemies(LevelConfig config) {
-        for (int i = 0; i < config.EnemyAmount; i++) {
+        for (int i = 0; i < config.EnemyAmountPerWave; i++) {
             EnemyType type = config.PossibleEnemies[Random.Range(0, config.PossibleEnemies.Count)];
             _enemiesManager.SpawnEnemy(type);
         }
     }
 
-    private IEnumerator ProgressCoroutine() {
+    public IEnumerator ProgressCoroutine() {
         float curTime = 0;
+        int curWave = 0;
         LevelConfig lvlConfig = GetLevel(_curLevel);
         while (curTime < lvlConfig.TimeToComplete) {
             curTime += Time.deltaTime * _progressMultiplier;
             _progressPercent = curTime / lvlConfig.TimeToComplete;
             _trainProgressView.ChangeProgress(_progressPercent);
+            if (curWave < lvlConfig._waves.Count) {
+                if (curTime > lvlConfig._waves[curWave]) {
+                    SpawnEnemies(lvlConfig);
+                    curWave++;
+                }
+            }
+
             yield return new WaitForEndOfFrame();
         }
     }
