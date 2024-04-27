@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +11,9 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     private LevelsManager _levelsManager;
+    
+    [SerializeField]
+    private SpiceManager _spiceManager;
 
     [SerializeField]
     private EnemiesManager _enemiesManager;
@@ -45,6 +50,7 @@ public class GameManager : MonoBehaviour {
 
         StopCoroutine(_gameLoopCoroutine);
         _gameLoopCoroutine = null;
+        _spiceManager.ResetSpiceList();
         _enemiesManager.ResetEnemies();
         _uiManager.ShowDiedDialog();
     }
