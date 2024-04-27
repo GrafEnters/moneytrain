@@ -234,13 +234,14 @@ MonoBehaviour:
   _speed: 3
   _recoilTime: 0.5
   _bulletSpeed: 16
-  _maxHp: 3
+  _maxHp: 6
   _hand: {fileID: 8769404652424949658}
   _bulletPrefab: {fileID: 7161131270977016334, guid: 73067fd6f2fab4547b10e79b7436c9a6, type: 3}
   _dashDuration: 0.2
   dashSpeed: 15
   _dashCooldawntime: 0.4
   _weaponView: {fileID: 0}
+  _hpView: {fileID: 0}
   _cameraFollow: {fileID: 0}
   _animator: {fileID: 6639150482099425445}
   _recoilForce: 0.05

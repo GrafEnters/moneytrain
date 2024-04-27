@@ -33,11 +33,19 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float _dashCooldawntime = 3;
 
+    #region UI
+
     [SerializeField]
     private WeaponView _weaponView;
+
+    [SerializeField]
+    private HpView _hpView;
+
+    #endregion
+    
+    
     [SerializeField]
     private CameraFollow _cameraFollow;
-
     [SerializeField]
     private Animator _animator;
 
@@ -75,6 +83,7 @@ public class Player : MonoBehaviour {
 
     private void TakeDamage() {
         Hp--;
+        _hpView.LoseHp();
     }
 
     public void Die() {
@@ -85,6 +94,7 @@ public class Player : MonoBehaviour {
     public void Spawn() {
         gameObject.SetActive(true);
         Hp = _maxHp;
+        _hpView.RefillHp(_maxHp);
     }
 
     private void FixedUpdate() {
