@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using UnityEngine;
 
 public class WagonsManager : MonoBehaviour {
     [SerializeField]
     private UIManager _uiManager;
+
+    [SerializeField] 
+    private SpiceManager _spiceManager;
 
     [SerializeField]
     private List<Wagon> _wagonPrefab;
@@ -45,15 +49,20 @@ public class WagonsManager : MonoBehaviour {
         Wagon wagon = Instantiate(_wagonPrefab[Random.Range(0,_wagonPrefab.Count)], _wagonsHolder);
         if (_wagons.Count == 0) {
             _wagons.Add(wagon);
+            
+            _spiceManager.AddNewSpice(wagon.CountOfSpice);
+            
             return;
         }
 
         if (isLeft) {
             wagon.Attach(_wagons.First().LeftHook, true);
             _wagons = _wagons.Prepend(wagon).ToList();
+            _spiceManager.AddNewSpice(wagon.CountOfSpice);
         } else {
             wagon.Attach(_wagons.Last().RightHook, false);
             _wagons.Add(wagon);
+            _spiceManager.AddNewSpice(wagon.CountOfSpice);
         }
     }
 
