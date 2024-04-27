@@ -11,7 +11,7 @@ public class MovingTrainView : MonoBehaviour {
     }
 
     public void ShowEnemiesAlive(int amount) {
-        _percentText.text = $"{amount} :(%";
+        _percentText.text = $"{amount}:(";
         _percentText.color = Color.red;
     }
 }
