@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -33,19 +34,9 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float _dashCooldawntime = 3;
 
-    #region UI
-
-    [SerializeField]
-    private WeaponView _weaponView;
-
-    [SerializeField]
-    private HpView _hpView;
-
-    #endregion
-    
-    
     [SerializeField]
     private CameraFollow _cameraFollow;
+
     [SerializeField]
     private Animator _animator;
 
@@ -54,11 +45,11 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private CursorController _cursorController;
-    
+
     private bool _isDashCooldown = false;
 
     private bool _isRecoil = false;
-    
+
     private bool _isReload = false;
 
     private int _maxBulletsAmount = 6;
@@ -83,7 +74,7 @@ public class Player : MonoBehaviour {
 
     private void TakeDamage() {
         Hp--;
-        _hpView.LoseHp();
+        UIManager.Instance.HUD.HpView.LoseHp();
     }
 
     public void Die() {
@@ -94,7 +85,10 @@ public class Player : MonoBehaviour {
     public void Spawn() {
         gameObject.SetActive(true);
         Hp = _maxHp;
-        _hpView.RefillHp(_maxHp);
+        UIManager.Instance.HUD.HpView.RefillHp(_maxHp);
+
+        _currentBulletsAmount = _maxBulletsAmount;
+        UIManager.Instance.HUD.WeaponView.ReloadInstant(_maxBulletsAmount);
     }
 
     private void FixedUpdate() {
@@ -156,27 +150,28 @@ public class Player : MonoBehaviour {
             yield return StartCoroutine(ReloadCoroutine());
         } else {
             _currentBulletsAmount--;
-            _weaponView.Shoot();
+            UIManager.Instance.HUD.WeaponView.Shoot();
             SpawnBullet(direction);
             _cameraFollow.RecoilShake(direction, _recoilForce);
             if (_currentBulletsAmount > 0) {
                 _cursorController.ChangeCursor(CursorState.Red);
             }
         }
-      
+
         yield return new WaitForSeconds(_recoilTime);
         if (_currentBulletsAmount > 0) {
             _cursorController.ChangeCursor(CursorState.Normal);
         } else {
             _cursorController.ChangeCursor(CursorState.Reload);
         }
+
         _isRecoil = false;
     }
 
     private IEnumerator ReloadCoroutine() {
         _isReload = true;
         _cursorController.ChangeCursor(CursorState.Reload);
-        yield return StartCoroutine(_weaponView.Reload(_maxBulletsAmount));
+        yield return StartCoroutine(UIManager.Instance.HUD.WeaponView.Reload(_maxBulletsAmount));
         _currentBulletsAmount = _maxBulletsAmount;
         _cursorController.ChangeCursor(CursorState.Normal);
         _isReload = false;
@@ -202,6 +197,8 @@ public class Player : MonoBehaviour {
             direction += Vector3.up * -1;
         }
 
+        ChangeRbName("PlayerDash");
+
         float curTime = 0;
         _animator.SetTrigger(Dash);
         transform.up = direction;
@@ -213,10 +210,21 @@ public class Player : MonoBehaviour {
             yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
 
+        ChangeRbName("Player");
+
         _isDashing = false;
         _isDashCooldown = true;
         yield return new WaitForSeconds(_dashCooldawntime);
         _isDashCooldown = false;
+    }
+
+    private void ChangeRbName(string layerName) {
+        var layer = LayerMask.NameToLayer(layerName);
+        List<Collider2D> cols = new List<Collider2D>();
+        _rb.GetAttachedColliders(cols);
+        foreach (var col in cols) {
+            col.gameObject.layer = layer;
+        }
     }
 
     private void SpawnBullet(Vector3 direction) {

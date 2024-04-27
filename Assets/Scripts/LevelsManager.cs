@@ -11,9 +11,6 @@ public class LevelsManager : MonoBehaviour {
     private EnemiesManager _enemiesManager;
 
     [SerializeField]
-    private TrainProgressView _trainProgressView;
-
-    [SerializeField]
     private BackgroundManager _backgroundManager;
 
     private int _curLevel = 0;
@@ -62,7 +59,7 @@ public class LevelsManager : MonoBehaviour {
         while (curTime < lvlConfig.TimeToComplete) {
             curTime += Time.deltaTime * _progressMultiplier;
             _progressPercent = curTime / lvlConfig.TimeToComplete;
-            _trainProgressView.ChangeProgress(_progressPercent);
+            UIManager.Instance.HUD.TrainProgressView.ChangeProgress(_progressPercent);
             if (curWave < lvlConfig._waves.Count) {
                 if (curTime > lvlConfig._waves[curWave]) {
                     SpawnEnemies(lvlConfig);

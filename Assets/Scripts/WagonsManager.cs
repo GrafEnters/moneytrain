@@ -5,9 +5,6 @@ using DefaultNamespace;
 using UnityEngine;
 
 public class WagonsManager : MonoBehaviour {
-    [SerializeField]
-    private UIManager _uiManager;
-
     [SerializeField] 
     private SpiceManager _spiceManager;
 
@@ -27,7 +24,7 @@ public class WagonsManager : MonoBehaviour {
     
     public IEnumerator AddWagonCoroutine() {
         _isWagonSelected = false;
-        _uiManager.ShowWagonSelectDialog();
+        UIManager.Instance.ShowWagonSelectDialog();
         yield return new WaitWhile(() => !_isWagonSelected);
     }
 
@@ -56,14 +53,18 @@ public class WagonsManager : MonoBehaviour {
         }
 
         if (isLeft) {
-            wagon.Attach(_wagons.First().LeftHook, true);
+            Wagon attachTo = _wagons.First();
+            attachTo.DisableWall(true);
+            wagon.Attach(attachTo.LeftHook, true);
             _wagons = _wagons.Prepend(wagon).ToList();
-            _spiceManager.AddNewSpice(wagon.CountOfSpice);
+           
         } else {
-            wagon.Attach(_wagons.Last().RightHook, false);
+            Wagon attachTo = _wagons.Last();
+            attachTo.DisableWall(false);
+            wagon.Attach(attachTo.RightHook, false);
             _wagons.Add(wagon);
-            _spiceManager.AddNewSpice(wagon.CountOfSpice);
         }
+        _spiceManager.AddNewSpice(wagon.CountOfSpice);
     }
 
     private List<Transform>  CollectSpawnPoints() {

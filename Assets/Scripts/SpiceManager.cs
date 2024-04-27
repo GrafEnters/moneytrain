@@ -6,9 +6,6 @@ using UnityEngine;
 public class SpiceManager : MonoBehaviour {
     public List<BoxOfSpice> listOfSpice = new List<BoxOfSpice>();
 
-    [SerializeField]
-    private TextMeshProUGUI _spiceCounter;
-
     private int _countOfSpice = 0;
 
     public void AddNewSpice(List<BoxOfSpice> spicesFromWagon) {
@@ -19,7 +16,7 @@ public class SpiceManager : MonoBehaviour {
 
     private void Update() {
         _countOfSpice = listOfSpice.Count;
-        _spiceCounter.text = $"ящиков: {_countOfSpice}";
+        UIManager.Instance.HUD.SpiceCounter.text = $"ящиков: {_countOfSpice}";
     }
 
     public void ResetSpiceList() {

@@ -23,13 +23,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private PlayerManager _playerManager;
 
-    [SerializeField]
-    private UIManager _uiManager;
-
     private Coroutine _gameLoopCoroutine;
 
     private void Start() {
-        _uiManager.ShowStartGameDialog();
+        UIManager.Instance.ShowStartGameDialog();
     }
 
     private IEnumerator GameLoop() {
@@ -38,6 +35,9 @@ public class GameManager : MonoBehaviour {
             _levelsManager.StartNextLevel();
 
             yield return StartCoroutine(_levelsManager.ProgressCoroutine());
+            if (_enemiesManager.AliveEnemies > 0) {
+                yield return StartCoroutine(_enemiesManager.WaitForEnemiesToDie());
+            }
             _playerManager.SetControlsEnabled(false);
             yield return StartCoroutine(_wagonsManager.AddWagonCoroutine());
         }
@@ -47,12 +47,12 @@ public class GameManager : MonoBehaviour {
         if (_gameLoopCoroutine == null) {
             return;
         }
-
+        StopAllCoroutines();
         StopCoroutine(_gameLoopCoroutine);
         _gameLoopCoroutine = null;
         _spiceManager.ResetSpiceList();
         _enemiesManager.ResetEnemies();
-        _uiManager.ShowDiedDialog();
+        UIManager.Instance.ShowDiedDialog();
     }
 
     public void StartGameLoop() {
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour {
         _wagonsManager.ResetTrain();
         _playerManager.ResetPlayer();
         _gameLoopCoroutine = StartCoroutine(GameLoop());
+        UIManager.Instance.ShowHud();
     }
 
     public void ReloadScene() {

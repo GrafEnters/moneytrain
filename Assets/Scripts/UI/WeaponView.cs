@@ -22,6 +22,13 @@ public class WeaponView : MonoBehaviour {
     private int _currentAmount;
     private int _totalAmount;
 
+    public void ReloadInstant(int amount) {
+        _currentAmount = amount;
+        _totalAmount = amount;
+        UpdateText();
+        RespawnBullets();
+    }
+    
     public IEnumerator Reload(int amount) {
         _currentAmount = amount;
         _totalAmount = amount;

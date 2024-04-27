@@ -21,6 +21,8 @@ public class EnemiesManager : MonoBehaviour {
 
     private List<Transform> _spawnPoints => _wagonsManager.SpawnPoints;
 
+    public int AliveEnemies => _aliveEnemies.Count;
+
     public void SpawnEnemy(EnemyType type) {
         Enemy prefab = _enemies.First(e => e.Type == type).Prefab;
         var point = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
@@ -39,8 +41,9 @@ public class EnemiesManager : MonoBehaviour {
     }
 
     public IEnumerator WaitForEnemiesToDie() {
-        while (_aliveEnemies.Count > 0) {
-            yield return new WaitForSeconds(1);
+        while (AliveEnemies > 0) {
+            UIManager.Instance.HUD.TrainProgressView.ShowEnemiesAlive(AliveEnemies);
+            yield return new WaitForEndOfFrame();
         }
     }
 
