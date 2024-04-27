@@ -118,27 +118,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
-  animatedSpriteImportData:
-  - name: MainScreenCombined
-    originalName: 
-    pivot: {x: 0.3970276, y: -0.4549763}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 4
-      width: 471
-      height: 211
-    spriteID: a20713054789e4743be75c0ec55649a3
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
+  animatedSpriteImportData: []
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -147,15 +127,7 @@ ScriptedImporter:
     layerFlags: 0
     layerType: 0
     blendMode: 0
-    cells:
-    - name: MainScreenCombined
-      frameIndex: 0
-      cellRect:
-        x: 101
-        y: 96
-        width: 471
-        height: 211
-      spriteId: a20713054789e4743be75c0ec55649a3
+    cells: []
     linkedCells: []
     parentIndex: -1
   platformSettings: []
