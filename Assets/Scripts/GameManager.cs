@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     private GameConfig _gameConfig;
 
     [SerializeField]
-    private LevelsManager _levelsManager;
+    private ProgressManager _progressManager;
     
     [SerializeField]
     private SpiceManager _spiceManager;
@@ -32,9 +32,9 @@ public class GameManager : MonoBehaviour {
     private IEnumerator GameLoop() {
         while (true) {
             _playerManager.SetControlsEnabled(true);
-            _levelsManager.StartNextLevel();
+            _progressManager.StartNextLevel();
 
-            yield return StartCoroutine(_levelsManager.ProgressCoroutine());
+            yield return StartCoroutine(_progressManager.ProgressCoroutine());
             if (_enemiesManager.AliveEnemies > 0) {
                 yield return StartCoroutine(_enemiesManager.WaitForEnemiesToDie());
             }
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
-        _levelsManager.ResetLevels();
+        _progressManager.ResetProgress();
         _wagonsManager.ResetTrain();
         _playerManager.ResetPlayer();
         _gameLoopCoroutine = StartCoroutine(GameLoop());

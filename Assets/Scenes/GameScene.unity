@@ -2671,7 +2671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameConfig: {fileID: 11400000, guid: d46a9f64c13a4294eab660801974e498, type: 2}
-  _levelsManager: {fileID: 2082155981}
+  _progressManager: {fileID: 2082155981}
   _spiceManager: {fileID: 2082155984}
   _enemiesManager: {fileID: 2082155979}
   _wagonsManager: {fileID: 2082155978}
@@ -2719,6 +2719,7 @@ MonoBehaviour:
   _weapons:
   - {fileID: 11400000, guid: eb64c3680d5b11046a0d76072626391a, type: 2}
   - {fileID: 11400000, guid: 7adebae7fe7d3e44cad2dc31d3484db3, type: 2}
+  _levels: []
 --- !u!1 &2085739362
 GameObject:
   m_ObjectHideFlags: 0
