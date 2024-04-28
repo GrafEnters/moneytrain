@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
@@ -8,22 +7,16 @@ public class Player : MonoBehaviour {
     private Rigidbody2D _rb;
 
     [SerializeField]
-    private float _speed;
-
-    [SerializeField]
-    private float _recoilTime;
-
-    [SerializeField]
-    private float _bulletSpeed = 10;
-
-    [SerializeField]
-    private int _maxHp = 3;
-
-    [SerializeField]
     private PlayerHand _hand;
 
     [SerializeField]
-    private Bullet _bulletPrefab;
+    private Animator _animator;
+
+    [SerializeField]
+    private float _speed;
+
+    [SerializeField]
+    private int _maxHp = 3;
 
     [SerializeField]
     private float _dashDuration = 1;
@@ -34,30 +27,20 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float _dashCooldawntime = 3;
 
-    [SerializeField]
-    private CameraFollow _cameraFollow;
+    private List<WeaponType> _hasWeapons = new List<WeaponType>();
 
-    [SerializeField]
-    private Animator _animator;
+    private Dictionary<WeaponType, Weapon> _weaponsD = new Dictionary<WeaponType, Weapon>();
+    private WeaponType _curWeaponType;
 
-    [SerializeField]
-    private float _recoilForce = 2;
-
-    [SerializeField]
-    private CursorController _cursorController;
+    private Weapon CurWeapon => _weaponsD[_curWeaponType];
 
     private bool _isDashCooldown = false;
 
-    private bool _isRecoil = false;
-
-    private bool _isReload = false;
-
-    private int _maxBulletsAmount = 6;
-    private int _currentBulletsAmount = 0;
-
     private bool _isDashing;
+    
+    private int _curHp = 3;
 
-    public int Hp = 3;
+    public int Hp => _curHp;
 
     private bool _isControlsEnabled = false;
     private static readonly int Dash = Animator.StringToHash("Dash");
@@ -73,22 +56,22 @@ public class Player : MonoBehaviour {
     }
 
     private void TakeDamage() {
-        Hp--;
+        _curHp--;
         UIManager.Instance.HUD.HpView.LoseHp();
     }
 
     public void Die() {
         gameObject.SetActive(false);
-        _isRecoil = false;
+        CurWeapon.OnDie();
     }
 
     public void Spawn() {
         gameObject.SetActive(true);
-        Hp = _maxHp;
+        _curHp = _maxHp;
         UIManager.Instance.HUD.HpView.RefillHp(_maxHp);
 
-        _currentBulletsAmount = _maxBulletsAmount;
-        UIManager.Instance.HUD.WeaponView.ReloadInstant(_maxBulletsAmount);
+        AddWeapon(WeaponType.BaseWeapon);
+        ChangeWeapon(WeaponType.BaseWeapon);
     }
 
     private void FixedUpdate() {
@@ -119,19 +102,19 @@ public class Player : MonoBehaviour {
         }
 
         if (!_isDashing) {
-            Vector3 dir = UpdateRotation();
+            UpdateRotation();
 
             if (Input.GetKeyDown(KeyCode.Space) && !_isDashCooldown) {
                 StartCoroutine(DashCoroutine());
             }
 
-            if (Input.GetMouseButtonDown(0) && !_isRecoil && !_isReload) {
-                StartCoroutine(ShootCoroutine(dir));
+            if (Input.GetMouseButtonDown(0) && CurWeapon.CanShoot) {
+                CurWeapon.Shoot();
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && !_isReload) {
-            StartCoroutine(ReloadCoroutine());
+        if (Input.GetKeyDown(KeyCode.R) && CurWeapon.CanShoot) {
+            CurWeapon.StartReload();
         }
     }
 
@@ -142,39 +125,6 @@ public class Player : MonoBehaviour {
         transform.up = direction;
         _hand.UpdatePos(mousePos);
         return direction;
-    }
-
-    private IEnumerator ShootCoroutine(Vector3 direction) {
-        _isRecoil = true;
-        if (_currentBulletsAmount == 0) {
-            yield return StartCoroutine(ReloadCoroutine());
-        } else {
-            _currentBulletsAmount--;
-            UIManager.Instance.HUD.WeaponView.Shoot();
-            SpawnBullet(direction);
-            _cameraFollow.RecoilShake(direction, _recoilForce);
-            if (_currentBulletsAmount > 0) {
-                _cursorController.ChangeCursor(CursorState.Red);
-            }
-        }
-
-        yield return new WaitForSeconds(_recoilTime);
-        if (_currentBulletsAmount > 0) {
-            _cursorController.ChangeCursor(CursorState.Normal);
-        } else {
-            _cursorController.ChangeCursor(CursorState.Reload);
-        }
-
-        _isRecoil = false;
-    }
-
-    private IEnumerator ReloadCoroutine() {
-        _isReload = true;
-        _cursorController.ChangeCursor(CursorState.Reload);
-        yield return StartCoroutine(UIManager.Instance.HUD.WeaponView.Reload(_maxBulletsAmount));
-        _currentBulletsAmount = _maxBulletsAmount;
-        _cursorController.ChangeCursor(CursorState.Normal);
-        _isReload = false;
     }
 
     private IEnumerator DashCoroutine() {
@@ -227,9 +177,37 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void SpawnBullet(Vector3 direction) {
-        var point = _hand.WeaponShootPoint;
-        Bullet bullet = Instantiate(_bulletPrefab, point.position, quaternion.identity);
-        bullet.Init(_bulletSpeed, _hand.ShootDir);
+    private void AddWeapon(WeaponType type) {
+        _hasWeapons.Add(type);
+    }
+
+    private void ChangeWeapon(int isUp) {
+        int index = _hasWeapons.IndexOf(_curWeaponType);
+        index += isUp;
+        index %= _hasWeapons.Count;
+        ChangeWeapon(_hasWeapons[index]);
+    }
+
+    private void ChangeWeapon(WeaponType type) {
+        if (!_hasWeapons.Contains(type)) {
+            return;
+        }
+
+        if (_curWeaponType == type) {
+            return;
+        }
+
+        if (_curWeaponType != WeaponType.None) {
+            _weaponsD[_curWeaponType].gameObject.SetActive(false);
+        }
+
+        _curWeaponType = type;
+        if (!_weaponsD.ContainsKey(type)) {
+            WeaponConfig cnfg = Tables.GetWeaponByType(type);
+            _weaponsD.Add(type, Instantiate(cnfg.WeaponPrefab, _hand.transform));
+            _weaponsD[_curWeaponType].Init(cnfg);
+        } else {
+            _weaponsD[type].gameObject.SetActive(true);
+        }
     }
 }

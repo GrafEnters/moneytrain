@@ -17,5 +17,5 @@ MonoBehaviour:
   - 0
   - 20
   - 40
-  TimeToComplete: 60
+  TimeToComplete: 10
   PossibleEnemies: 01000000

@@ -2684,6 +2684,7 @@ GameObject:
   - component: {fileID: 2082155979}
   - component: {fileID: 2082155978}
   - component: {fileID: 2082155984}
+  - component: {fileID: 2082155985}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -2808,6 +2809,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listOfSpice: []
+--- !u!114 &2082155985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082155977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61a27f44e41455888d505ee0593cb10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapons:
+  - {fileID: 11400000, guid: eb64c3680d5b11046a0d76072626391a, type: 2}
 --- !u!1 &2085739362
 GameObject:
   m_ObjectHideFlags: 0

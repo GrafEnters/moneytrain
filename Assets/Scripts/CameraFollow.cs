@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
+
+    public static CameraFollow Instance;
     [SerializeField]
     private Transform _target;
 
@@ -15,6 +17,7 @@ public class CameraFollow : MonoBehaviour {
     private float _followLerp, _shakeDecceleration;
 
     private void Awake() {
+        Instance = this;
         _transform = transform;
     }
 

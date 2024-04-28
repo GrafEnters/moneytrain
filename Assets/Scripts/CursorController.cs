@@ -2,18 +2,24 @@ using System;
 using UnityEngine;
 
 public class CursorController : MonoBehaviour {
+    public static CursorController Instance;
+
     [SerializeField]
     private Texture2D _normal, _red, _reload;
+
+    private void Awake() {
+        Instance = this;
+    }
 
     private void Start() {
         ChangeCursor(CursorState.Normal);
     }
 
-    public void ChangeCursor(CursorState state) {
+    public static void ChangeCursor(CursorState state) {
         Texture2D texture2D = state switch {
-            CursorState.Normal => _normal,
-            CursorState.Red => _red,
-            CursorState.Reload => _reload,
+            CursorState.Normal =>Instance. _normal,
+            CursorState.Red => Instance._red,
+            CursorState.Reload => Instance._reload,
             _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
         };
 
