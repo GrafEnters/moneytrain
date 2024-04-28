@@ -13,9 +13,9 @@ public class HUD : MonoBehaviour {
     public TrainProgressView TrainProgressView => _trainProgressView;
 
     [SerializeField]
-    private WeaponView _weaponView;
+    private WeaponViewContainer _weaponViewContainer;
 
-    public WeaponView WeaponView => _weaponView;
+    public WeaponViewContainer  WeaponViewContainer => _weaponViewContainer;
 
     [SerializeField]
     private TextMeshProUGUI _spiceCounter;

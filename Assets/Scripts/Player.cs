@@ -27,6 +27,9 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float _dashCooldawntime = 3;
 
+    [SerializeField]
+    private WeaponType _startingWeapon = WeaponType.BaseWeapon;
+
     private List<WeaponType> _hasWeapons = new List<WeaponType>();
 
     private Dictionary<WeaponType, Weapon> _weaponsD = new Dictionary<WeaponType, Weapon>();
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour {
     private bool _isDashCooldown = false;
 
     private bool _isDashing;
-    
+
     private int _curHp = 3;
 
     public int Hp => _curHp;
@@ -70,8 +73,8 @@ public class Player : MonoBehaviour {
         _curHp = _maxHp;
         UIManager.Instance.HUD.HpView.RefillHp(_maxHp);
 
-        AddWeapon(WeaponType.BaseWeapon);
-        ChangeWeapon(WeaponType.BaseWeapon);
+        AddWeapon(_startingWeapon);
+        ChangeWeapon(_startingWeapon);
     }
 
     private void FixedUpdate() {
@@ -113,7 +116,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && CurWeapon.CanShoot) {
+        if (Input.GetKeyDown(KeyCode.R) && CurWeapon.CanReload) {
             CurWeapon.StartReload();
         }
     }
@@ -205,9 +208,10 @@ public class Player : MonoBehaviour {
         if (!_weaponsD.ContainsKey(type)) {
             WeaponConfig cnfg = Tables.GetWeaponByType(type);
             _weaponsD.Add(type, Instantiate(cnfg.WeaponPrefab, _hand.transform));
-            _weaponsD[_curWeaponType].Init(cnfg);
+            _weaponsD[_curWeaponType].FirstTimeInit(cnfg);
         } else {
             _weaponsD[type].gameObject.SetActive(true);
+            _weaponsD[type].InitView();
         }
     }
 }

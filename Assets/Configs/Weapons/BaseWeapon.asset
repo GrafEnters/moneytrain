@@ -15,8 +15,9 @@ MonoBehaviour:
   Type: 1
   WeaponPrefab: {fileID: 6457172459404799617, guid: 6dec1ac2c19f64e4db9c241a398b69e3, type: 3}
   BulletPrefab: {fileID: 7161131270977016334, guid: 73067fd6f2fab4547b10e79b7436c9a6, type: 3}
-  WeaponViewPrefab: {fileID: 0}
+  WeaponViewPrefab: {fileID: 2721550788019567221, guid: 7acdf07b56ddd2746b1b28455ab09bc0, type: 3}
   BulletSpeed: 10
   RecoilTime: 0.25
   RecoilForce: 0.05
   MaxBulletsAmount: 6
+  BulletLifeTime: 5

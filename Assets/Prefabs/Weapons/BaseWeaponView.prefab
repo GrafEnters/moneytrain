@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2721550788019567221}
   - component: {fileID: 3445491851856628254}
   m_Layer: 5
-  m_Name: WeaponView
+  m_Name: BaseWeaponView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -22,6 +22,13 @@ public class WeaponView : MonoBehaviour {
     private int _currentAmount;
     private int _totalAmount;
 
+    public void SetDataInstant(int amount, int maxAmount) {
+        _currentAmount = amount;
+        _totalAmount = maxAmount;
+        UpdateText();
+        RespawnBullets();
+    }
+    
     public void ReloadInstant(int amount) {
         _currentAmount = amount;
         _totalAmount = amount;
@@ -45,7 +52,7 @@ public class WeaponView : MonoBehaviour {
 
         _bullets = new List<GameObject>();
 
-        for (int index = 0; index < _totalAmount; index++) {
+        for (int index = 0; index < _currentAmount; index++) {
             GameObject b = Instantiate(_bulletPrefab, _bulletsHolder);
             b.SetActive(true);
             _bullets.Add(b);

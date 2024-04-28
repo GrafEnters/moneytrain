@@ -11,15 +11,22 @@ public class Weapon : MonoBehaviour {
     private bool _isReload = false;
     private int _currentBulletsAmount = 0;
 
-
     public Transform ShootPoint => _shootPoint;
     public bool CanShoot => !_isRecoil && !_isReload;
+    public bool CanReload => !_isReload && _currentBulletsAmount < _config.MaxBulletsAmount;
 
-    public void Init(WeaponConfig config) {
+    private WeaponViewContainer _viewContainer => UIManager.Instance.HUD.WeaponViewContainer;
+    public void FirstTimeInit(WeaponConfig config) {
         _config = config;
 
         _currentBulletsAmount =_config. MaxBulletsAmount;
-        UIManager.Instance.HUD.WeaponView.ReloadInstant(_config.MaxBulletsAmount);
+        InitView();
+        _viewContainer.CurWeaponView.ReloadInstant(_config.MaxBulletsAmount);
+    }
+
+    public void InitView() {
+        _viewContainer.ChangeWeaponView(_config.Type);
+        _viewContainer.CurWeaponView.SetDataInstant(_currentBulletsAmount, _config.MaxBulletsAmount);
     }
 
     public void StartReload() {
@@ -29,16 +36,16 @@ public class Weapon : MonoBehaviour {
     private IEnumerator ReloadCoroutine() {
         _isReload = true;
         CursorController.ChangeCursor(CursorState.Reload);
-        yield return StartCoroutine(UIManager.Instance.HUD.WeaponView.Reload(_config.MaxBulletsAmount));
+        yield return StartCoroutine(_viewContainer.CurWeaponView.Reload(_config.MaxBulletsAmount));
         _currentBulletsAmount =_config. MaxBulletsAmount;
         CursorController.ChangeCursor(CursorState.Normal);
         _isReload = false;
     }
 
-    private void SpawnBullet(Vector3 direction) {
+    protected virtual void SpawnBullet(Vector3 direction) {
         var point = _shootPoint;
         Bullet bullet = Instantiate(_config.BulletPrefab, point.position, quaternion.identity);
-        bullet.Init(_config.BulletSpeed, direction);
+        bullet.Init(_config, direction);
     }
 
     public void Shoot() {
@@ -57,7 +64,7 @@ public class Weapon : MonoBehaviour {
             yield return StartCoroutine(ReloadCoroutine());
         } else {
             _currentBulletsAmount--;
-            UIManager.Instance.HUD.WeaponView.Shoot();
+            _viewContainer.CurWeaponView.Shoot();
             SpawnBullet(direction);
             CameraFollow.Instance.RecoilShake(direction,_config. RecoilForce);
             if (_currentBulletsAmount > 0) {

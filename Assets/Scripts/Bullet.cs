@@ -8,11 +8,15 @@ public class Bullet : MonoBehaviour {
     private Vector3 _direction;
     private float _speed;
 
-    public void Init(float speed, Vector3 dir) {
+    public void Init(WeaponConfig config, Vector3 dir) {
+        Init(config.BulletSpeed, dir, config.BulletLifeTime);
+    }
+
+    public void Init(float speed, Vector3 dir, float lifetime = 5) {
         _speed = speed;
         _direction = dir.normalized;
         transform.up = _direction;
-        Destroy(gameObject, 5);
+        Destroy(gameObject, lifetime);
     }
 
     private void FixedUpdate() {

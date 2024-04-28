@@ -18,6 +18,8 @@ public class WeaponConfig : ScriptableObject {
     public float RecoilForce = 0.05f;
 
     public int MaxBulletsAmount = 6;
+
+    public float BulletLifeTime = 5;
 }
 
 [Serializable]
