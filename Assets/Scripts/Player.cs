@@ -79,7 +79,7 @@ public class Player : MonoBehaviour {
 
     private void FixedUpdate() {
         if (!_isControlsEnabled) {
-            _rb.velocity = Vector2.zero;
+            _rb.linearVelocity = Vector2.zero;
             _rb.angularVelocity = 0;
             return;
         }
@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
             Vector2 shift = _speed * Time.fixedDeltaTime * movement;
             _rb.MovePosition(_rb.position + shift);
         } else {
-            _rb.velocity = Vector2.zero;
+            _rb.linearVelocity = Vector2.zero;
         }
     }
 
